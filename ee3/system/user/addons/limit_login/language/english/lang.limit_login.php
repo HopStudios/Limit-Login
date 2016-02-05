@@ -16,8 +16,10 @@ $lang = array(
 'Sorry', 
 
 'too_many_logins' => 
-'You have made too many logins recently.<br>You will not be allowed to login until tomorrow.', 
+'You have made too many logins recently. The current login rules doesn\'t allow you to login anymore.',
 
+'too_many_logins_tomorrow' =>
+'You have made too many logins recently.<br>You will not be allowed to login until tomorrow.', 
 	
 );
 
