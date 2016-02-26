@@ -136,6 +136,48 @@ class Limit_login_ext {
 
 	// ----------------------------------------------------------------------
 	
+
+	// ----------------------------------------------------------------------
+
+	/**
+	 * Disable Extension
+	 *
+	 * This method removes information from the exp_extensions table
+	 *
+	 * @return void
+	 */
+	function disable_extension()
+	{
+
+		ee()->load->dbforge();
+
+		ee()->dbforge->drop_table('limit_login'); 
+		
+		ee()->db->where('class', __CLASS__);
+		ee()->db->delete('extensions');
+		
+	}
+
+	// ----------------------------------------------------------------------
+
+	/**
+	 * Update Extension
+	 *
+	 * This function performs any necessary db updates when the extension
+	 * page is visited
+	 *
+	 * @return 	mixed	void on update / false if none
+	 */
+	function update_extension($current = '')
+	{
+		if ($current == '' OR $current == $this->version)
+		{
+			return FALSE;
+		}
+	}	
+	
+	// ----------------------------------------------------------------------
+	
 	/**
 	 * check_logout
 	 *
@@ -163,7 +205,7 @@ class Limit_login_ext {
 			*/
 	
 			ee()->output->show_user_error('general',lang('too_many_logins')
-			      . " (".ee()->session->cache['limit_login']['limit'].")",lang('sorry'));
+				  . " (".ee()->session->cache['limit_login']['limit'].")",lang('sorry'));
 		}
 
 		return;
@@ -217,7 +259,7 @@ class Limit_login_ext {
 			if ($count > $logins)
 			{
 				ee()->logger->log_action('Login denied to member_id ' . 
-				      ee()->session->userdata('member_id') . ' who has logged in ' . $count . ' times');
+					  ee()->session->userdata('member_id') . ' who has logged in ' . $count . ' times');
 	
 				ee()->session->cache['limit_login']['limit'] = $count; // count is always bigger than one, right?
 
@@ -250,47 +292,6 @@ class Limit_login_ext {
 		return;
 
 	}
-
-	// ----------------------------------------------------------------------
-
-	/**
-	 * Disable Extension
-	 *
-	 * This method removes information from the exp_extensions table
-	 *
-	 * @return void
-	 */
-	function disable_extension()
-	{
-
-		ee()->load->dbforge();
-
-		ee()->dbforge->drop_table('limit_login'); 
-		
-		ee()->db->where('class', __CLASS__);
-		ee()->db->delete('extensions');
-		
-	}
-
-	// ----------------------------------------------------------------------
-
-	/**
-	 * Update Extension
-	 *
-	 * This function performs any necessary db updates when the extension
-	 * page is visited
-	 *
-	 * @return 	mixed	void on update / false if none
-	 */
-	function update_extension($current = '')
-	{
-		if ($current == '' OR $current == $this->version)
-		{
-			return FALSE;
-		}
-	}	
-	
-	// ----------------------------------------------------------------------
 }
 
 /* End of file ext.limit_login.php */
