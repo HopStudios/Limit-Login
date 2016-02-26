@@ -1,18 +1,23 @@
-#Hop Limit Login
+# Limit Login
 
 Do you have a site that you want to protect from overuse? Would you like to cut down on the amount of passing around of logins that people can do?
 
 One way to solve that problem is to limit the number of times people can login to ExpressionEngine, and this add-on extension does exactly that.
 
-If you want to use it, please buy it. :)
+## Usage
 
-[More information, how to use...](ee3/system/user/addons/limit_login/README.md)
+Superadmins are never limited in the amount they can log in, so don’t test this while logged in as a superadmin because you’ll be disappointed.
 
-Want more ?
-===========
-Take a look at our [ExpressionEngine Add-Ons](http://www.hopstudios.com/software)
+This only limits logins to the public side of your site, not to your control panel.
 
-##License
+## Changelog
+
+### 1.0
+
+Initial Release
+
+## Licence
+
 Updated: Jan. 6, 2009
 
 ####Permitted Use
