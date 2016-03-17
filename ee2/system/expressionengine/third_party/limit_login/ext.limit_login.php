@@ -45,8 +45,6 @@ class Limit_login_ext {
 		'unit'                  => 'day'
 	);
 	
-	private $EE;
-	
 	/**
 	 * Constructor
 	 *
@@ -54,7 +52,6 @@ class Limit_login_ext {
 	 */
 	public function __construct($settings = '')
 	{
-		$this->EE =& get_instance();
 		$this->settings = $settings;
 	}
 	
@@ -111,29 +108,29 @@ class Limit_login_ext {
 				'enabled'	=> 'y',
 				'settings'	=> serialize($this->default_settings)
 			);
-			$this->EE->db->insert('extensions', $data);			
+			ee()->db->insert('extensions', $data);			
 		}
 
-		$this->EE->load->dbforge();
+		ee()->load->dbforge();
 
 		// -------------------------------------------
 		//  Create the exp_limit_login table
 		// -------------------------------------------
 
-		if (! $this->EE->db->table_exists('limit_login'))
+		if (! ee()->db->table_exists('limit_login'))
 		{
-			$this->EE->dbforge->add_field(array(
+			ee()->dbforge->add_field(array(
 				'limit_id'        => array('type' => 'int', 'constraint' => 10, 'unsigned' => TRUE, 'auto_increment' => TRUE),
 				'member_id'        => array('type' => 'int', 'constraint' => 10, 'unsigned' => TRUE),
 				'site_id'          => array('type' => 'int', 'constraint' => 4, 'unsigned' => TRUE, 'default' => 1),
 				'login_date'       => array('type' => 'int', 'constraint' => 10, 'unsigned' => TRUE)
 			));
 
-			$this->EE->dbforge->add_key('limit_id', TRUE);
-			$this->EE->dbforge->add_key('member_id');
-			$this->EE->dbforge->add_key('login_date');
+			ee()->dbforge->add_key('limit_id', TRUE);
+			ee()->dbforge->add_key('member_id');
+			ee()->dbforge->add_key('login_date');
 
-			$this->EE->dbforge->create_table('limit_login', TRUE); // TRUE adds if not exists
+			ee()->dbforge->create_table('limit_login', TRUE); // TRUE adds if not exists
 		}
 
 	}	
@@ -149,14 +146,14 @@ class Limit_login_ext {
 	public function member_member_logout()
 	{
 	
-		if (isset($this->EE->session->cache['limit_login']['limit']) && $this->EE->session->cache['limit_login']['limit'] > 0)
+		if (isset(ee()->session->cache['limit_login']['limit']) && ee()->session->cache['limit_login']['limit'] > 0)
 		{
 			
-			$this->EE->lang->loadfile('limit_login');
+			ee()->lang->loadfile('limit_login');
 			
 			/* Used for general info, not for errors
-			$url	= ( ! isset($url)) ? $this->EE->config->item('site_url')	: $url;
-			$name	= ( ! isset($name)) ? stripslashes($this->EE->config->item('site_name'))	: $name;
+			$url	= ( ! isset($url)) ? ee()->config->item('site_url')	: $url;
+			$name	= ( ! isset($name)) ? stripslashes(ee()->config->item('site_name'))	: $name;
 			$data = array(	'title' 	=> lang('sorry'),
 							'heading'	=> lang('sorry'),
 							'content'	=> lang('too_many_logins'),
@@ -165,8 +162,8 @@ class Limit_login_ext {
 						 );
 			*/
 	
-			$this->EE->output->show_user_error('general',lang('too_many_logins')
-			      . " (".$this->EE->session->cache['limit_login']['limit'].")",lang('sorry'));
+			ee()->output->show_user_error('general',lang('too_many_logins')
+			      . " (".ee()->session->cache['limit_login']['limit'].")",lang('sorry'));
 		}
 
 		return;
@@ -184,13 +181,13 @@ class Limit_login_ext {
 	{
 	
 		// in case we need to log things
-		$this->EE->load->library('logger');
+		ee()->load->library('logger');
 
 		// how many logins allowed
 		$logins =  $this->settings['logins'];
 
 		// Calculate time
-		$now = $this->EE->localize->now;
+		$now = ee()->localize->now;
 		
 		// Calculate interval
 		$interval = $this->settings['every']; // interval will be in seconds
@@ -200,30 +197,30 @@ class Limit_login_ext {
 
 		// Either way, add the login to the table
 		$data = array(
-			'member_id'		=> $this->EE->session->userdata('member_id'),
-			'site_id'		=> $this->EE->config->item('site_id'),
-			'login_date'	=> $this->EE->localize->now
+			'member_id'		=> ee()->session->userdata('member_id'),
+			'site_id'		=> ee()->config->item('site_id'),
+			'login_date'	=> ee()->localize->now
 		);
-		$this->EE->db->insert('limit_login', $data);			
+		ee()->db->insert('limit_login', $data);			
 
 		// superadmins can always login; don't bother checking
-		if ($this->EE->session->userdata('group_id') != 1) 
+		if (ee()->session->userdata('group_id') != 1) 
 		{
 		
 			// Look up logins in that time period
-			$this->EE->db->where('login_date >', ($now-$interval) );
-			$this->EE->db->where('member_id', $this->EE->session->userdata('member_id') );
-			$this->EE->db->where('site_id', $this->EE->config->item('site_id') );
+			ee()->db->where('login_date >', ($now-$interval) );
+			ee()->db->where('member_id', ee()->session->userdata('member_id') );
+			ee()->db->where('site_id', ee()->config->item('site_id') );
 			
-			$count =	$this->EE->db->count_all_results('limit_login');
+			$count =	ee()->db->count_all_results('limit_login');
 
 			// Decide if you should log the person out
 			if ($count > $logins)
 			{
-				$this->EE->logger->log_action('Login denied to member_id ' . 
-				      $this->EE->session->userdata('member_id') . ' who has logged in ' . $count . ' times');
+				ee()->logger->log_action('Login denied to member_id ' . 
+				      ee()->session->userdata('member_id') . ' who has logged in ' . $count . ' times');
 	
-				$this->EE->session->cache['limit_login']['limit'] = $count; // count is always bigger than one, right?
+				ee()->session->cache['limit_login']['limit'] = $count; // count is always bigger than one, right?
 
 				// Log them out
 				if ( ! class_exists('Member_auth'))
@@ -242,9 +239,9 @@ class Limit_login_ext {
 		// Sometimes you should prune the table
 		$expire = time() - $interval - 1;
 		srand(time());
-		if ((rand() % 100) < $this->EE->session->gc_probability) // use the site standard probability
+		if ((rand() % 100) < ee()->session->gc_probability) // use the site standard probability
 		{
-			$this->EE->db->where('login_date <', $expire)
+			ee()->db->where('login_date <', $expire)
 						 ->delete('limit_login');
 		}	
 
@@ -264,12 +261,12 @@ class Limit_login_ext {
 	function disable_extension()
 	{
 
-		$this->EE->load->dbforge();
+		ee()->load->dbforge();
 
-		$this->EE->dbforge->drop_table('limit_login'); 
+		ee()->dbforge->drop_table('limit_login'); 
 		
-		$this->EE->db->where('class', __CLASS__);
-		$this->EE->db->delete('extensions');
+		ee()->db->where('class', __CLASS__);
+		ee()->db->delete('extensions');
 		
 	}
 
