@@ -188,9 +188,7 @@ class Limit_login_ext {
 	{
 	
 		if (isset(ee()->session->cache['limit_login']['limit']) && ee()->session->cache['limit_login']['limit'] > 0)
-		{
-			// echo ee()->session->cache['limit_login']['limit'];
-			
+		{			
 			ee()->lang->loadfile('limit_login');
 			
 			/* Used for general info, not for errors

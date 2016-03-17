@@ -151,7 +151,6 @@ class Limit_login_ext {
 	
 		if (isset($this->EE->session->cache['limit_login']['limit']) && $this->EE->session->cache['limit_login']['limit'] > 0)
 		{
-			// echo $this->EE->session->cache['limit_login']['limit'];
 			
 			$this->EE->lang->loadfile('limit_login');
 			
