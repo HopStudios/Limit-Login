@@ -10,6 +10,12 @@ Superadmins are never limited in the amount they can log in, so don’t test thi
 
 This only limits logins to the public side of your site, not to your control panel.
 
+
+## Support
+
+Having issues ? Found a bug ? Suggestions ? Contact us at [tech@hopstudios.com](mailto:tech@hopstudios.com)
+
+
 ## Changelog
 
 ### 1.0
