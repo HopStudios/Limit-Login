@@ -174,7 +174,7 @@ class Limit_login_ext {
 		{
 			return FALSE;
 		}
-	}	
+	}
 	
 	// ----------------------------------------------------------------------
 	
@@ -188,7 +188,7 @@ class Limit_login_ext {
 	{
 	
 		if (isset(ee()->session->cache['limit_login']['limit']) && ee()->session->cache['limit_login']['limit'] > 0)
-		{			
+		{
 			ee()->lang->loadfile('limit_login');
 			
 			/* Used for general info, not for errors
@@ -257,7 +257,7 @@ class Limit_login_ext {
 			if ($count > $logins)
 			{
 				ee()->logger->log_action('Login denied to member_id ' . 
-					  ee()->session->userdata('member_id') . ' who has logged in ' . $count . ' times');
+				ee()->session->userdata('member_id') . ' who has logged in ' . $count . ' times');
 	
 				ee()->session->cache['limit_login']['limit'] = $count; // count is always bigger than one, right?
 
@@ -284,8 +284,8 @@ class Limit_login_ext {
 		if ((rand() % 100) < ee()->session->gc_probability) // use the site standard probability
 		{
 			ee()->db->where('login_date <', $expire)
-						 ->delete('limit_login');
-		}	
+			->delete('limit_login');
+		}
 
 		return;
 

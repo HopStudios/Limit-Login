@@ -1,6 +1,6 @@
 <?php
 $config['name']='Limit Login';
-$config['version']='1.0.0';
+$config['version']='2.0.0';
 $config['nsm_addon_updater']['versions_xml']='http://www.hopstudios.com/software/versions/limit_login/';
 
 // Version constant
