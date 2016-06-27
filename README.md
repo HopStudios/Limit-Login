@@ -4,7 +4,7 @@ Do you have a site that you want to protect from overuse? Would you like to cut 
 
 One way to solve that problem is to limit the number of times people can login to ExpressionEngine, and this add-on extension does exactly that.
 
-If you want to use it, please buy it. :)
+If you want to use it, [please buy it](https://devot-ee.com/add-ons/hop-limit-login). :)
 
 [More information, how to use...](ee3/system/user/addons/limit_login/README.md)
 
